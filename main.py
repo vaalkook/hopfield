@@ -1,0 +1,27 @@
+import matplotlib.pyplot as plt
+from hopfield_numeros import num_9, num_7, num_5, num_6
+from utils import recall, add_noise
+
+patterns = [num_9, num_7, num_5, num_6]
+
+N = patterns[0].size
+W = np.zeros((N, N))
+for p in patterns:
+    x = p.reshape(N, 1)
+    W += x @ x.T
+np.fill_diagonal(W, 0)
+
+def show(img, title):
+    plt.imshow(img, cmap='gray')
+    plt.title(title)
+    plt.axis('off')
+
+test = add_noise(num_5, 0.4)
+result = recall(test, W)
+
+plt.figure(figsize=(6, 3))
+plt.subplot(1, 2, 1)
+show(test, "Entrada con ruido (5)")
+plt.subplot(1, 2, 2)
+show(result, "Salida recordada")
+plt.show()
