@@ -1,6 +1,6 @@
+import numpy as np
 import matplotlib.pyplot as plt
 from hopfield_numeros import num_9, num_7, num_5, num_6
-from utils import recall, add_noise
 
 patterns = [num_9, num_7, num_5, num_6]
 
@@ -10,6 +10,22 @@ for p in patterns:
     x = p.reshape(N, 1)
     W += x @ x.T
 np.fill_diagonal(W, 0)
+
+def sign(x):
+    return np.where(x >= 0, 1, -1)
+
+def recall(pattern, W, steps=5):
+    s = pattern.reshape(N, 1)
+    for _ in range(steps):
+        s = sign(W @ s)
+    return s.reshape(pattern.shape)
+
+def add_noise(pattern, percent=0.3):
+    noisy = pattern.copy()
+    n = int(noisy.size * percent)
+    idx = np.random.choice(noisy.size, n, replace=False)
+    noisy.flat[idx] *= -1
+    return noisy
 
 def show(img, title):
     plt.imshow(img, cmap='gray')
