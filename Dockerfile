@@ -1,20 +1,17 @@
-# Usamos una imagen base de Python
 FROM python:3.12-slim
-
-# Crear directorio de la app
 WORKDIR /app
 
-# Copiar los archivos al contenedor
+# Copiar solo los archivos que existen
 COPY hopfield_numeros.py .
+COPY main.py .
 COPY utils.py .
-COPY app.py .
 COPY requirements.txt .
 
 # Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Exponer el puerto que Flask usará
+# Exponer el puerto (solo si tu main.py usa Flask)
 EXPOSE 5000
 
-# Comando para ejecutar la app
-CMD ["python", "app.py"]
+# Comando por defecto
+CMD ["python", "main.py"]
